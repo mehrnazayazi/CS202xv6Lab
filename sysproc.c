@@ -92,5 +92,12 @@ sys_uptime(void)
 int
 sys_getnum(void)
 {
-    return getNumProc();
+    int func;
+    if(argint(0, &func) == 1){
+        return getNumProc();
+    }
+    else{
+        return 1957;
+    }
+
 }

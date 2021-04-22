@@ -5,6 +5,6 @@
 int
 main(void)
 {
-    printf(1, "Unix V6 was released in the year %d\n", getnum());
+    printf(1, "Unix V6 was released in the year %d\n", getnum(2));
     exit();
 }
