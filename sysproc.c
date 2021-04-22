@@ -10,12 +10,14 @@
 int
 sys_fork(void)
 {
-  return fork();
+    myproc()->sysnum +=1;
+    return fork();
 }
 
 int
 sys_exit(void)
 {
+    myproc()->sysnum +=1;
   exit();
   return 0;  // not reached
 }
@@ -23,13 +25,15 @@ sys_exit(void)
 int
 sys_wait(void)
 {
+    myproc()->sysnum +=1;
   return wait();
 }
 
 int
 sys_kill(void)
 {
-  int pid;
+    myproc()->sysnum +=1;
+    int pid;
 
   if(argint(0, &pid) < 0)
     return -1;
@@ -39,12 +43,14 @@ sys_kill(void)
 int
 sys_getpid(void)
 {
+    myproc()->sysnum +=1;
   return myproc()->pid;
 }
 
 int
 sys_sbrk(void)
 {
+    myproc()->sysnum +=1;
   int addr;
   int n;
 
@@ -59,6 +65,7 @@ sys_sbrk(void)
 int
 sys_sleep(void)
 {
+    myproc()->sysnum +=1;
   int n;
   uint ticks0;
 
@@ -82,6 +89,7 @@ sys_sleep(void)
 int
 sys_uptime(void)
 {
+    myproc()->sysnum +=1;
   uint xticks;
 
   acquire(&tickslock);
@@ -92,12 +100,16 @@ sys_uptime(void)
 int
 sys_getnum(void)
 {
+    myproc()->sysnum +=1;
     int func;
     if(argint(0, &func) == 1){
         return getNumProc();
     }
+    else if (rgint(0, &func) == 2){
+        return myproc()->sysnum;
+    }
     else{
-        return 1957;
+        return 1957
     }
 
 }
