@@ -92,5 +92,5 @@ sys_uptime(void)
 int
 sys_getnum(void)
 {
-    return 1975;
+    return getNumProc();
 }
