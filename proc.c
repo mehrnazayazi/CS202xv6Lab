@@ -355,6 +355,73 @@ scheduler(void)
   }
 }
 
+
+
+#define RAND_MAX_32 ((1U << 31) - 1)
+int rseed = 0;
+int rand() {
+    return (rseed = (rseed * 214013 + 2531011) & RAND_MAX_32) >> 16;
+}
+
+void
+lottery_scheduler(void)
+{
+    struct proc *p;
+    struct cpu *c = mycpu();
+    c->proc = 0;
+    int chosenTicket;
+
+//	cprintf("Calling proc::lottery_scheduler\n");
+
+    int tot_tickets = 0;
+    int counter = 0;
+
+    for(;;) {
+        //	Enables interrupts on this processor
+        sti();
+
+        //	Get the lock
+        acquire(&ptable.lock);
+
+        //	Find the total number of tickets in the system
+        tot_tickets = 0;
+        for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+            if (p->state != RUNNABLE) {
+                continue;
+            }
+            tot_tickets += p->tickets;
+        }
+
+        //	Grab a random ticket from the ticket list
+        chosenTicket = rand() % tot_tickets;
+
+        counter = 0;
+        for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+            if (p->state != RUNNABLE) continue;
+            ++counter;
+            if (counter != chosenTicket) continue;
+
+            //	Schedule this process
+            c->proc = p;
+            switchuvm(p);
+            p->state = RUNNING;
+            swtch(&(c->lottery_scheduler),p->context);
+
+            switchkvm();
+            c->proc = 0;
+            break;
+        }
+        release(&ptable.lock);
+    }
+    cprintf("This should never print. In proc::lottery_schduler\n");
+}
+
+
+
+
+
+
+
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this
@@ -378,7 +445,8 @@ sched(void)
     panic("sched interruptible");
   intena = mycpu()->intena;
   swtch(&p->context, mycpu()->scheduler);
-  mycpu()->intena = intena;
+  //	swtch(&p->context, mycpu()->lottery_scheduler);
+    mycpu()->intena = intena;
 }
 
 // Give up the CPU for one scheduling round.

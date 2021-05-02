@@ -8,6 +8,9 @@ struct cpu {
   int ncli;                    // Depth of pushcli nesting.
   int intena;                  // Were interrupts enabled before pushcli?
   struct proc *proc;           // The process running on this cpu or null
+
+    struct context *lottery_scheduler;
+
 };
 
 extern struct cpu cpus[NCPU];
@@ -51,6 +54,8 @@ struct proc {
   char name[16];               // Process name (debugging)
   //Mehrnaz
   int sysnum;                  //number of syscalls he proc made
+  int tickets;
+
 };
 
 // Process memory is laid out contiguously, low addresses first:
