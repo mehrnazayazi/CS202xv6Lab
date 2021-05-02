@@ -3,6 +3,7 @@
 #include "user.h"
 int main(int argc, char *argv[]) {
     settickets(30);
+    setstrides(10);
     int i,k;
     const int loop=43000;
     for(i=0;i<loop;i++) {

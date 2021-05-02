@@ -55,7 +55,9 @@ mpmain(void)
   idtinit();       // load idt register
   xchg(&(mycpu()->started), 1); // tell startothers() we're up
 //  scheduler();     // start running processes
-  lottery_scheduler();
+//  lottery_scheduler();
+    	stride_scheduler();
+
 
 }
 

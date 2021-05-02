@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "limits.h"
 
 struct {
   struct spinlock lock;
@@ -89,6 +90,7 @@ found:
   p->state = EMBRYO;
   p->pid = nextpid++;
   p->tickets = 3;
+  p->default_stride = 100/(p->tickets);
 
   release(&ptable.lock);
 
@@ -461,6 +463,49 @@ lottery_scheduler(void)
 }
 
 
+void
+stride_scheduler(void)
+{
+    struct proc *p;
+    struct cpu *c = mycpu();
+    c->proc = 0;
+    float min_stride;
+    struct proc *chosen_proc = myproc();
+
+    cprintf("Calling proc::stride_scheduler\n");
+
+    for (;;) {
+
+        // Enables interrupts on this processor
+        sti();
+
+        acquire(&ptable.lock);
+
+        min_stride = INT_MAX;
+        for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+            if (p->state != RUNNABLE) continue;
+
+            if (p->stride < min_stride) {
+                min_stride = p->stride;
+                chosen_proc = p;
+            }
+        }
+        chosen_proc->stride += chosen_proc->default_stride;
+        c->proc = chosen_proc;
+        switchuvm(chosen_proc);
+        chosen_proc->state = RUNNING;
+
+        swtch(&(c->stride_scheduler), chosen_proc->context);
+        switchkvm();
+
+        //	Process is done running now
+        //	It should have changed its p->state before coming back
+        c->proc = 0;
+        release(&ptable.lock);
+    }
+    cprintf("This should never print. In proc::stride_scheduler\n");
+}
+
 
 
 
@@ -489,7 +534,9 @@ sched(void)
     panic("sched interruptible");
   intena = mycpu()->intena;
 //  swtch(&p->context, mycpu()->scheduler);
-	swtch(&p->context, mycpu()->lottery_scheduler);
+//	swtch(&p->context, mycpu()->lottery_scheduler);
+    swtch(&p->context, mycpu()->stride_scheduler);
+
     mycpu()->intena = intena;
 }
 

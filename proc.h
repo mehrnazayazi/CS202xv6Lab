@@ -10,6 +10,8 @@ struct cpu {
   struct proc *proc;           // The process running on this cpu or null
 
     struct context *lottery_scheduler;
+    struct context *stride_scheduler;
+
 
 };
 
@@ -55,6 +57,8 @@ struct proc {
   //Mehrnaz
   int sysnum;                  //number of syscalls he proc made
   int tickets;
+  int default_stride;
+  int stride;
 
 };
 

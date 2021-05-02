@@ -1,3 +1,10 @@
+## XV6 Lottery and Stride Schdeuler
+# Part1: Info system call
+In this part a system call named getnum was added which gets an integer as an input and return one of the following:
+1. if the input is 1 the output shows count of processes in the system
+2. if the inout is 2 the output shows
+
+
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)

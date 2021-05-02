@@ -126,3 +126,12 @@ int sys_settickets(void)
     myproc()->tickets = n;
     return n;
 }
+
+int sys_setstrides(void)
+{
+    int n;
+    if(argint(0, &n) < 0)
+        return -1;
+    myproc()->default_stride = n;
+    return n;
+}

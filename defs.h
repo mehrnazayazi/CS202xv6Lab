@@ -115,6 +115,7 @@ void            procdump(void);
 void            scheduler(void) __attribute__((noreturn));
 
 void		lottery_scheduler(void) __attribute__((noreturn));
+void		stride_scheduler(void) __attribute__((noreturn));
 
 
 void            sched(void);
