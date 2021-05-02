@@ -1,9 +1,25 @@
-## XV6 Lottery and Stride Schdeuler
-# Part1: Info system call
+# XV6 Lottery and Stride Schdeuler
+## Part1: Info system call
 In this part a system call named getnum was added which gets an integer as an input and return one of the following:
-1. if the input is 1 the output shows count of processes in the system
-2. if the inout is 2 the output shows
+1. if the input is 1 the output shows **count of processes in the system**
+2. if the input is 2 the output shows **count of the total number of system calls that the current process has made so far**
+3. if the input is 3 the output shows **The number of memory pages the current process is using**
+for adding a system call we need to modify these files:
+1. syscall.h
+2. syscall.c
+3. sysproc.c
+4. usys.S
+5. user.h
+#### syscall.h
+`define SYS_info 22`
+This line is written to define a new system call in the operating system and to assign a number(22 here) to the new system call.
+The next file that needs to be modified is **syscall.c**
+#### syscall.c
+The following lines needs to be added to this file.
+`106 extern int sys_info(void);
 
+
+ 133 [SYS_info] sys_info,`
 
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version
