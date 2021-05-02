@@ -102,14 +102,18 @@ sys_getnum(void)
 {
     myproc()->sysnum +=1;
     int func;
-    if(argint(0, &func) == 1){
+    if(argint(0, &func) < 0)
+        return -1;
+    if(func == 1){
         return getNumProc();
     }
-    else if (rgint(0, &func) == 2){
+    else if (func == 2){
         return myproc()->sysnum;
     }
-    else{
-        return 1957
+    else if(func == 3){
+        return myproc()->sz/PGSIZE;
+    } else{
+        return func+1000;
     }
 
 }
