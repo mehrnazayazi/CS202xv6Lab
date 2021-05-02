@@ -427,13 +427,22 @@ lottery_scheduler(void)
 
         //	Grab a random ticket from the ticket list
         chosenTicket = rand() % tot_tickets;
-        cprintf("tot ticket = %d\n",tot_tickets);
+        cprintf("chosen ticket = %d\n",chosenTicket);
 
         counter = 0;
         for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-            if (p->state != RUNNABLE) continue;
-            ++counter;
-            if (counter != chosenTicket) continue;
+            if(p->state != RUNNABLE)
+                continue;
+
+            //find the process which holds the lottery winning ticket
+            if ((counter + p->tickets) < chosenTicket){
+                counter += p->tickets;
+                continue;
+            }
+
+//            if (p->state != RUNNABLE) continue;
+//            ++counter;
+//            if (counter != chosenTicket) continue;
 
             //	Schedule this process
             foundproc = 1;
