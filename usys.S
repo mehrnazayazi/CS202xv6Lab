@@ -29,7 +29,7 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
-SYSCALL(getnum)
+SYSCALL(info)
 SYSCALL(settickets)
 SYSCALL(setstrides)
 

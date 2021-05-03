@@ -23,7 +23,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int getnum(int func);
+int info(int func);
 int settickets(int);
 int setstrides(int);
 

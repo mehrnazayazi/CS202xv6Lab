@@ -91,6 +91,7 @@ found:
   p->pid = nextpid++;
   p->tickets = 3;
   p->default_stride = 100/(p->tickets);
+  p->stride = p->default_stride;
 
   release(&ptable.lock);
 
@@ -378,11 +379,10 @@ lottery_scheduler(void)
 
 	cprintf("Calling proc::lottery_scheduler\n");
 
-    int tot_tickets = 0;
+    int total_tickets = 0;
     int counter = 0;
 
     for(;;) {
-//        cprintf("inside for loop\n");
         if (!foundproc) hlt();
         foundproc = 0;
         //	Enables interrupts on this processor
@@ -390,18 +390,16 @@ lottery_scheduler(void)
 
         //	Get the lock
         acquire(&ptable.lock);
-//        cprintf("gets the lock\n");
 
         //	Find the total number of tickets in the system
-        tot_tickets = 0;
+        total_tickets = 0;
         for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
             if (p->state != RUNNABLE) {
                 continue;
             }
-            tot_tickets += p->tickets;
+            total_tickets += p->tickets;
         }
-//        cprintf("tot ticket = %d\n",tot_tickets);
-        if(tot_tickets <=1){
+        if(total_tickets <=1){
 
             for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
                 if(p->state != RUNNABLE)
@@ -428,7 +426,7 @@ lottery_scheduler(void)
         }
 
         //	Grab a random ticket from the ticket list
-        chosenTicket = rand() % tot_tickets;
+        chosenTicket = rand() % total_tickets;
         cprintf("chosen ticket = %d\n",chosenTicket);
 
         counter = 0;
@@ -441,10 +439,6 @@ lottery_scheduler(void)
                 counter += p->tickets;
                 continue;
             }
-
-//            if (p->state != RUNNABLE) continue;
-//            ++counter;
-//            if (counter != chosenTicket) continue;
 
             //	Schedule this process
             foundproc = 1;
@@ -459,7 +453,6 @@ lottery_scheduler(void)
         }
         release(&ptable.lock);
     }
-    cprintf("This should never print. In proc::lottery_schduler\n");
 }
 
 
@@ -503,7 +496,6 @@ stride_scheduler(void)
         c->proc = 0;
         release(&ptable.lock);
     }
-    cprintf("This should never print. In proc::stride_scheduler\n");
 }
 
 

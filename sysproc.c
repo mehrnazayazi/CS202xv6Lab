@@ -98,7 +98,7 @@ sys_uptime(void)
   return xticks;
 }
 int
-sys_getnum(void)
+sys_info(void)
 {
     myproc()->sysnum +=1;
     int func;
@@ -113,13 +113,14 @@ sys_getnum(void)
     else if(func == 3){
         return myproc()->sz/PGSIZE;
     } else{
-        return func+1000;
+        return -1;
     }
 
 }
 
 int sys_settickets(void)
 {
+    myproc()->sysnum +=1;
     int n;
     if(argint(0, &n) < 0)
         return -1;
@@ -129,9 +130,11 @@ int sys_settickets(void)
 
 int sys_setstrides(void)
 {
+    myproc()->sysnum +=1;
     int n;
     if(argint(0, &n) < 0)
         return -1;
     myproc()->default_stride = n;
+    myproc()->stride = n;
     return n;
 }

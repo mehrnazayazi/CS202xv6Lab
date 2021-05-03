@@ -16,10 +16,9 @@ This line is written to define a new system call in the operating system and to 
 The next file that needs to be modified is **syscall.c**
 #### syscall.c
 The following lines needs to be added to this file.
-`106 extern int sys_info(void);
+`106 extern int sys_info(void);`
 
-
- 133 [SYS_info] sys_info,`
+`133 [SYS_info] sys_info,`
 
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version

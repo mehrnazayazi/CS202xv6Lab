@@ -55,7 +55,7 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   //Mehrnaz
-  int sysnum;                  //number of syscalls he proc made
+  int sysnum;                  //number of syscalls the process made
   int tickets;
   int default_stride;
   int stride;
