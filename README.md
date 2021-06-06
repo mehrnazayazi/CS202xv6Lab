@@ -1,4 +1,4 @@
-# XV6 Lottery and Stride Schdeuler
+# XV6 Lottery and Stride Schdeuler(With Report)
 ## Part1: Info system call
 In this part a system call named getnum was added which gets an integer as an input and return one of the following:
 1. if the input is 1 the output shows **count of processes in the system**
